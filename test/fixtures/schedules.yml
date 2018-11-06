@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2018-11-05
+  flame: 1
+  class: MyString
+  subjectId: 1
+  classroom: 1
+  remarks: MyText
+
+two:
+  date: 2018-11-05
+  flame: 1
+  class: MyString
+  subjectId: 1
+  classroom: 1
+  remarks: MyText
