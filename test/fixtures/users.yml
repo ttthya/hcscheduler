@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  studenId: 1
+  class: MyString
+  email: MyString
+  password_digest: MyString
+  googleCalendarId: MyString
+
+two:
+  studenId: 1
+  class: MyString
+  email: MyString
+  password_digest: MyString
+  googleCalendarId: MyString

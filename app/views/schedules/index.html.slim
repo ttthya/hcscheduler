@@ -1,2 +1,27 @@
-h1 Schedules#index
-p Find me in app/views/schedules/index.html.slim
+h1 Schedules一覧
+
+= link_to '新規登録', new_schedule_path, class: 'btn btn-primary'
+
+.mb-3
+table.table.table-hover
+ thead.thead-dafault
+  tr
+   th=Schedule.human_attribute_name(:scheduleDate)
+   th=Schedule.human_attribute_name(:classNo)
+   th=Schedule.human_attribute_name(:flame)
+   th=Schedule.human_attribute_name(:subject)
+   th=Schedule.human_attribute_name(:classroom)
+   th=Schedule.human_attribute_name(:remarks)
+   th
+ tbody
+  - @schedules.each do |schedule|
+   tr
+    td= schedule.scheduleDate
+    td= schedule.classNo
+    td= schedule.flame
+    td= schedule.subject
+    td= schedule.classroom
+    td= schedule.remarks
+    td
+     = link_to '編集', edit_schedule_path(schedule), class: 'btn btn-primary mr-3'
+     = link_to '削除', schedule, method: :delete, date: { confirm: "「#{schedule.scheduleDate}の#{schedule.flame}」を削除します"}, class: 'btn btn-danger'

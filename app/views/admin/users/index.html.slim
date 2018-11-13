@@ -1,0 +1,29 @@
+h1 ユーザー一覧
+
+= link_to '新規登録', new_admin_user_path, class: 'btn btn-primary'
+
+.mb-3
+table.table-default
+ thead.thead-default
+  tr
+   th = User.human_attribute_name(:studentId)
+   th = User.human_attribute_name(:classNo)
+   th = User.human_attribute_name(:email)
+   th = User.human_attribute_name(:admin)
+   th = User.human_attribute_name(:googleCalendarId)
+   th = User.human_attribute_name(:created_at)
+   th
+ tbody
+ - @users.each do |user|
+   tr
+    td= link_to user.id, [:admin, user]
+    td= user.classNo
+    td= user.studentId
+    td= user.email
+    td= user.admin? ? '管理者' : '学生'
+    td= user.googleCalendarId
+    td= user.created_at
+    td
+     =link_to '編集', edit_admin_user_path(user), class: 'btn btn-primary mr-3'
+     =link_to '削除', [:admin, user], method: :delete, data: { confirm: "ユーザー#{user.studentId}を削除します。よろしいですか"}, class: 'btn btn-danger'
+

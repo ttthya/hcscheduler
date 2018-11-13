@@ -10,20 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_05_030216) do
+ActiveRecord::Schema.define(version: 2018_11_12_030358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "schedules", force: :cascade do |t|
     t.date "date"
+    t.string "classNo"
     t.integer "flame"
-    t.string "class"
-    t.integer "subjectId"
     t.integer "classroom"
     t.text "remarks"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subject"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.integer "studentId", null: false
+    t.string "classNo"
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.string "googleCalendarId"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "admin", default: false, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["studentId"], name: "index_users_on_studentId", unique: true
   end
 
 end

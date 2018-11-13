@@ -1,0 +1,10 @@
+h1 ログイン
+
+=form_with scope: :session, local: true do |f|
+ .form-group
+  =f.label :studentId, '学籍番号'
+  =f.text_field :studentId, class: 'form-control', id: 'session_studentId'
+ .form-group
+  =f.label :password, 'パスワード'
+  =f.password_field :password, class: 'form-control', id: 'session_password'
+ =f.submit 'ログインする', class: 'btn btn-primary'
