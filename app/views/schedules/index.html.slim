@@ -4,19 +4,11 @@ h1 Schedules一覧
 
 .mb-3
 table.table.table-hover
- thead.thead-dafault
-  tr
-   th=Schedule.human_attribute_name(:scheduleDate)
-   th=Schedule.human_attribute_name(:classNo)
-   th=Schedule.human_attribute_name(:flame)
-   th=Schedule.human_attribute_name(:subject)
-   th=Schedule.human_attribute_name(:classroom)
-   th=Schedule.human_attribute_name(:remarks)
-   th
  tbody
   - @schedules.each do |schedule|
    tr
     td= schedule.scheduleDate
+    td= link_to schedule.pdf, schedule_path(schedule)
     td= schedule.classNo
     td= schedule.flame
     td= schedule.subject

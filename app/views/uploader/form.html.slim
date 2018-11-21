@@ -1,0 +1,10 @@
+h1 PDF指定
+
+=form_for @uploadfile, url: schedules_path do |f|
+ .form-group
+  f.label :name
+  f.text_field :name
+ .form-group
+  f.label :file
+  f.file_field :file
+ f.submit 'Upload', class:'btn btn-primary'

@@ -66,9 +66,12 @@ gem 'html2slim'
 
 gem 'bootstrap'
 
+#pdf reader,writer
 gem 'rabbit'
 gem 'pdftotext'
 gem 'holiday_jp'
+gem 'carrierwave'
+gem 'pdf-reader'
 
 group :development, :test do
   gem 'pry-rails'

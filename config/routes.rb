@@ -5,9 +5,12 @@ Rails.application.routes.draw do
 
   namespace :admin do
    resources :users
+   resources :uploader
   end
 
 root to: 'schedules#index'
 
-resources :schedules
+resources :schedules do
+ post :import, on: :collection
+end
 end

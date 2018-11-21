@@ -1,4 +1,8 @@
 class Admin::UsersController < ApplicationController
+  before_action :require_admin, only: [:destory, :index]
+  before_action :correct_user, only: [:edit, :update, :show]
+
+
   def index
    @users = User.all
   end
@@ -8,7 +12,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def new
-
    @user = User.new
   end
 
@@ -48,5 +51,14 @@ class Admin::UsersController < ApplicationController
   def user_params
    params.require(:user).permit(:studentId, :classNo, :email, :googleCalendarId, :admin, :password, :password_confirmation)
   end
+
+  def correct_user
+   @user = User.find(params[:id])
+   redirect_to root_path unless current_user.admin? unless @user == current_user
+  end
+
+ def require_admin
+  redirect_to root_path unless current_user.admin?
+ end
 
 end

@@ -5,23 +5,10 @@ h1 Schedule新規登録
 .nav.justify-content-end
  =link_to '一覧', schedules_path, class: 'nav-link'
 
-=form_with model: @schedule, local: true do |f|
- .form-group
-  =f.label :scheduleDate
-  =f.text_field :scheduleDate, class: 'form-control',id: 'schedule_scheduleDate'
- .form-group
-  =f.label :classNo
-  =f.text_field :classNo, class: 'form-control',id: 'schedule_classNo'
- .form-group
-  =f.label :flame
-  =f.number_field :flame, class: 'form-control',id: 'schedule_flame'
- .form-group
-  =f.label :subject
-  =f.text_field :subject, class: 'form-control',id: 'schedule_subject'
- .form-group
-  =f.label :classroom
-  =f.number_field :classroom, class: 'form-control',id: 'schedule_classroom'
- .form-group
-  =f.label :remarks
-  =f.text_area :remarks, class: 'form-control',id: 'schedule_remarks'
- =f.submit nil, class: 'btn btn-primary'
+= form_with model: @schedule, local: true do |f|
+  .form-group
+   =f.label :dpm, '学科'
+   =f.select :dpm, [["R","R"],["S","S"]], class: 'form-control', id: 'schedule_calssNo'
+   =f.label :datenow, '年月'
+   =f.date_select :datenow, discard_day: true
+  =f.submit '生成する', class: 'btn btn-primary'

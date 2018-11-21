@@ -1,10 +1,11 @@
-require 'pdf/reader'
+require 'pdf-reader'
 require 'csv'
 require 'date'
 require 'holiday_jp'
 
+path = "lib/tasks/pdf/test3.pdf"
 
-File.open("lib/tasks/pdf/test.pdf", "rb") do |io|
+File.open(path) do |io|
   # インスタンス化
   reader = PDF::Reader.new(io)
 
@@ -53,10 +54,9 @@ File.open("lib/tasks/pdf/test.pdf", "rb") do |io|
     d = d.next
   end  
  
-   subject = texts[8][1]
+   subject = texts[7][1]
    p subject
-
-  p   subject.class
+   p   subject.class
    
  
 #holiday_jp test
@@ -64,6 +64,12 @@ File.open("lib/tasks/pdf/test.pdf", "rb") do |io|
   p  holidays.first.name
   p "#{holidays.first.date}"
   p "#{holidays.first.date}".class
+
+  sports = Date.new(2018,10,8)
+  p HolidayJp.holiday?(sports).nil?
+  sports = sports.next
+  p HolidayJp.holiday?(sports).nil?
+
 
 #授業を１日毎に配列にCSV形式で格納
  

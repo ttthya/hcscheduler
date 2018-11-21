@@ -1,0 +1,8 @@
+=form_with model: schedule, local: true do |f|
+ .form-group
+  =f.label :classNo
+  =f.text_field :classNo, class: 'form-control', id: 'schedule_classNo'
+ .form-group
+  =f.label :pdf
+  =f.file_field :pdf, class: 'form-control'
+ =f.submit nil, class: 'btn btn-primary'
