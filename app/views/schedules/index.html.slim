@@ -1,5 +1,18 @@
 h1 Schedules一覧
 
+= search_form_for @q, class: 'mb-5' do |f|
+  .form-group.row
+    = f.label :classNo_cont, '学科', class: 'col-sm-2 col-form-label'
+    .col-sm-10
+      = f.text_field :classNo_cont, class: 'form-control'
+  .form-group.row
+    = f.label :scheduleDate,'日付', class: 'col-sm-2 col-form-label'
+    .col-sm-10
+      = f.text_field :scheduleDate_gteq, class: 'form-control'
+      = f.text_field :scheduleDate_lteq, class: 'form-control'
+  .form-group
+    = f.submit class: 'btn btn-outline-primary'
+
 = link_to '新規登録', new_schedule_path, class: 'btn btn-primary'
 
 .mb-3
@@ -8,7 +21,6 @@ table.table.table-hover
   - @schedules.each do |schedule|
    tr
     td= schedule.scheduleDate
-    td= link_to schedule.pdf, schedule_path(schedule)
     td= schedule.classNo
     td= schedule.flame
     td= schedule.subject

@@ -11,7 +11,8 @@ class SchedulesController < ApplicationController
 
 
   def index
-   @schedules = Schedule.all
+   @q = Schedule.ransack(params[:q])
+   @schedules = @q.result(distinct: true)
   end
 
   def show
@@ -24,11 +25,11 @@ class SchedulesController < ApplicationController
 
   def edit
    @schedule = Schedule.find(params[:id])
+
   end
 
 
   def create
-
 #出力されたpdfのtxtを読み込む
    dpm = params[:schedule][:dpm]
    pdf_read_to_write(dpm)
@@ -73,35 +74,81 @@ class SchedulesController < ApplicationController
       schedule.scheduleDate=scheDate
       schedule.classNo=key
       schedule.subject=scheduleTime[value][dateCount+1]
-      schedule.classroom=scheduleTime[value+1][dateCount]
+      value+=1
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
+      end
+      schedule.classroom=scheduleTime[value][dateCount]
+      value+=1
       schedule.flame=1
       schedule.save
 #2flame
       schedule = Schedule.new
       schedule.scheduleDate=scheDate
       schedule.classNo=key
-      schedule.subject=scheduleTime[value+2][dateCount+2]
-      schedule.classroom=scheduleTime[value+3][dateCount]
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
+      end
+      schedule.subject=scheduleTime[value][dateCount+2]
+      value+=1
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
+      end
+      schedule.classroom=scheduleTime[value][dateCount]
+      value+=1
       schedule.flame=2
       schedule.save
 #3flame
       schedule = Schedule.new
       schedule.scheduleDate=scheDate
       schedule.classNo=key
-      schedule.subject=scheduleTime[value+4][dateCount+2]
-      schedule.classroom=scheduleTime[value+5][dateCount]
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
+      end
+      schedule.subject=scheduleTime[value][dateCount+2]
+      value+=1
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
+      end
+      schedule.classroom=scheduleTime[value][dateCount]
+      value+=1
       schedule.flame=3
       schedule.save
 #4flame
-      if scheduleTime[value+6][dateCount] != 1
-       schedule = Schedule.new
-       schedule.scheduleDate=scheDate
-       schedule.classNo=key
-       schedule.subject=scheduleTime[value+6][dateCount]
-       schedule.classroom=scheduleTime[value+7][dateCount]
-       schedule.flame=4
-       schedule.save
+      schedule = Schedule.new
+      schedule.scheduleDate=scheDate
+      schedule.classNo=key
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
       end
+      schedule.subject=scheduleTime[value][dateCount]
+      scheduleTime[value..-1].each do |scheduleArray|
+       if scheduleArray.length > 4
+        break
+       end
+       value+=1
+      end
+      schedule.classroom=scheduleTime[value][dateCount]
+      schedule.flame=4
+      schedule.save
      end
      scheDate = scheDate.next
     else
@@ -114,7 +161,26 @@ class SchedulesController < ApplicationController
   def update
    schedule = Schedule.find(params[:id])
    schedule.update!(schedule_params)
+
+   users = User.where(classNo: schedule.classNo)
+
+   addresses = nil
+   users.each do |user|
+    if addresses.nil?
+     addresses = user.email
+    else
+     addresses << ","+user.email
+    end
+   end
+  
+   p addresses 
+#adddressを,区切りの文字列にして受け渡し
+   if schedule.update(schedule_params)
+    ScheduleMailer.edition_email(schedule,addresses).deliver_now
    redirect_to schedules_url, notice: "時間割「#{schedule.scheduleDate}の#{schedule.flame}コマ目」を変更しました"
+   else
+    render :edit
+   end
   end
    
   def destroy
@@ -123,22 +189,29 @@ class SchedulesController < ApplicationController
    redirect_to schedules_url, notice: "時間割「#{schedule.scheduleDate}の#{schedule.flame}コマ目」を削除しました"
   end
 
-  def upload
-   @upload_file = UploadFile.new( params.require(:upload_file).permit(:name,:file))
-   @upload_file.save
-   redirect_to schedules_url, notice: "時間割のファイルをアップロードしました"
+  def confirm_edit
+   @schedule = schedule.edit(schedule_params)
+   render :edit unless @schedule.valid?
   end
 
 
-  def import
-   @schedule.import(params[:file])
-   p "===============I can get================"
-  end
+
+#  def upload
+#   @upload_file = UploadFile.new( params.require(:upload_file).permit(:name,:file))
+#   @upload_file.save
+#   redirect_to schedules_url, notice: "時間割のファイルをアップロードしました"
+#  end
+
+
+#  def import
+#   @schedule.import(params[:file])
+#   p "===============I can get================"
+#  end
 
  private
 
   def schedule_params
-   params.require(:schedule).permit(:scheduleDate, :classNo, :flame, :subject, :classroom, :remarks, :pdf)
+   params.require(:schedule).permit(:scheduleDate, :classNo, :flame, :subject, :classroom, :remarks)
   end
  
   def require_admin

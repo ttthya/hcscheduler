@@ -65,6 +65,8 @@ gem 'slim-rails'
 gem 'html2slim'
 
 gem 'bootstrap'
+gem 'ransack'
+gem 'google-api-client', require: 'google/apis/calendar_v3'
 
 #pdf reader,writer
 gem 'rabbit'

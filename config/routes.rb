@@ -8,9 +8,12 @@ Rails.application.routes.draw do
    resources :uploader
   end
 
-root to: 'schedules#index'
+  root to: 'schedules#index'
 
-resources :schedules do
- post :import, on: :collection
-end
+  resources :schedules do
+   collection do
+    post 'confirm'
+   end
+  end
+
 end
