@@ -5,7 +5,6 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :classNo
       t.string :email, null: false
       t.string :password_digest, null: false
-      t.string :googleCalendarId
 
       t.timestamps
       t.index :studentId, unique: true

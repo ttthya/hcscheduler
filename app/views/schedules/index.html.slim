@@ -12,8 +12,8 @@ h1 Schedules一覧
       = f.text_field :scheduleDate_lteq, class: 'form-control'
   .form-group
     = f.submit class: 'btn btn-outline-primary'
-
-= link_to '新規登録', new_schedule_path, class: 'btn btn-primary'
+- if current_user.admin?
+ = link_to '新規登録', new_schedule_path, class: 'btn btn-primary'
 
 .mb-3
 table.table.table-hover
@@ -27,5 +27,7 @@ table.table.table-hover
     td= schedule.classroom
     td= schedule.remarks
     td
-     = link_to '編集', edit_schedule_path(schedule), class: 'btn btn-primary mr-3'
-     = link_to '削除', schedule, method: :delete, date: { confirm: "「#{schedule.scheduleDate}の#{schedule.flame}」を削除します"}, class: 'btn btn-danger'
+     - if current_user.admin?
+      = link_to '編集', edit_schedule_path(schedule), class: 'btn btn-primary mr-3'
+     - if current_user.admin?
+      = link_to '削除', schedule, method: :delete, date: { confirm: "「#{schedule.scheduleDate}の#{schedule.flame}」を削除します"}, class: 'btn btn-danger'

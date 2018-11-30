@@ -1,5 +1,5 @@
 class ScheduleMailer < ApplicationMailer
-  default from: 'xxxx@hcs.co.jp' 
+  default from: 'xxxx@hcs.ac.jp' 
 
   def edition_email(schedule,addresses)
    @schedule = schedule

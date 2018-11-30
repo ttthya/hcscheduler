@@ -1,15 +1,57 @@
-# アカウントメールアドレス
-mail = "hcscheduler21@gmail.com"
-# パスワード
-pass = "monster0141"
-# Googleカレンダーの「カレンダー設定」画面から取得した非公開URL
-feed = "https://calendar.google.com/calendar/embed?src=hyt.takahashi%40gmail.com&ctz=Asia%2FTokyo"
+require 'googleauth'
+require 'googleauth/stores/file_token_store'
+require 'google/api_client/client_secrets'
+require 'google/apis/calendar_v3'
 
-srv = GoogleCalendar::Service.new(mail, pass)
-cal = GoogleCalendar::Calendar::new(srv, feed)
-events = cal.events
+class GCalAPI
+  APPLICATION_NAME = 'hcscheduler'
+  USER_ID = 'hcscheduler21@gmail.com' # 例). hoge@gmail.com
+  TIME_ZONE = 'Japan'
 
-events.each do |event|
-  p event.title
-  p event.desc
+  # CalendarID
+  GCAL_ID = '16kvh1kaib5fnh4uk975e0g4nk@group.calendar.google.com'
+  # callback URL
+  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
+  # 事前認証
+  class << self
+    def authorize
+      dir_path = File.dirname(__FILE__)
+      client_id = Google::Auth::ClientId.from_file("#{dir_path}/client_secrets.json")
+      token_store = Google::Auth::Stores::FileTokenStore.new(
+        file: "#{dir_path}/tokens.yaml")
+      scope = 'https://www.googleapis.com/auth/calendar'
+      authorizer = Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
+      credentials = authorizer.get_credentials(USER_ID)
+      if credentials.nil?
+        raise "credentials is none..."
+      end
+      credentials
+    end
+
+    # Google Calendar への登録
+    def insert_gcal_event(gcal_type, evt_start, evt_end, summary, description, location)
+      service = Google::Apis::CalendarV3::CalendarService.new
+      service.client_options.application_name = APPLICATION_NAME
+      service.authorization = self.authorize
+
+      # 登録するイベント内容
+      h_tmp = {
+        summary: summary,
+        description: description,
+        location: location,
+        start: {
+          date_time: evt_start.iso8601,
+          time_zone: TIME_ZONE
+        },
+        end: {
+          date_time: evt_end.iso8601,
+          time_zone: TIME_ZONE 
+        }
+      }
+
+      event = Google::Apis::CalendarV3::Event.new(h_tmp)
+      service.insert_event(GCAL_ID, event)
+    end
+  end
 end

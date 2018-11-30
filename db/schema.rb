@@ -44,8 +44,7 @@ ActiveRecord::Schema.define(version: 2018_11_15_064941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "subject"
-    t.string "scheduleDate"
-    t.string "file"
+    t.date "scheduleDate"
   end
 
   create_table "upload_files", force: :cascade do |t|
@@ -60,7 +59,6 @@ ActiveRecord::Schema.define(version: 2018_11_15_064941) do
     t.string "classNo"
     t.string "email", null: false
     t.string "password_digest", null: false
-    t.string "googleCalendarId"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false, null: false

@@ -6,7 +6,7 @@ class SchedulesController < ApplicationController
   require 'active_support/core_ext/object/try'
 
 
-  before_action :require_admin, only: [:new,:create,:destroy]
+  before_action :require_admin, only: [:new,:create,:destroy,:edit]
 
 
 
